@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/fabian/CLionProjects/Client/Cliente.c
+stdio.h
+-
+Socket_Cliente.h
+/home/fabian/CLionProjects/Client/Socket_Cliente.h
+Socket.h
+/home/fabian/CLionProjects/Client/Socket.h
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+
+/home/fabian/CLionProjects/Client/Socket.h
+sys/socket.h
+-
+
+/home/fabian/CLionProjects/Client/Socket_Cliente.h
+sys/socket.h
+-
+
