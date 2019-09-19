@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/TEC/2019 - Semestre II - CE/Lenguajes, Compiladores e Interpretes/Lenguajes/Tarea Programada #3/ServerDK/java-json.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
