@@ -3,41 +3,57 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+
 public class Main {
+	
+	
+	
+	/**
+	 * Corre el Servidor
+	 * @throws JSONException
+	 */
+	public static void runServer(String jsonTest) throws JSONException {
+		
+		//To JSON again
+    	
+		/*TESTING*/
+		//Esto seria el buffer del servidor
+    	String jsonStringFromClient = jsonTest;
+    	
+    	
+		JSONObject jObjFromClient = new JSONObject(jsonStringFromClient);
+		
+		if (jObjFromClient.get("POSX") != "" && jObjFromClient.get("POSY") != "") {
+			System.out.println("\nPosx: " + jObjFromClient.get("POSX"));
+			System.out.println("\nPosy: " + jObjFromClient.get("POSY"));
+		}
+		
+				
+	}
+	
+	
+	
 	
 	public static void main (String [] args) throws JSONException
     {
-        
-    	String jsonString;
-		
-    	JSONObject obj = new JSONObject();
-    	/*put(key,value);*/
-    	obj.put("posx","350");
-    	obj.put("posy","650");
-    	
-    	//List -> Array
-    	JSONArray list = new JSONArray();
-    	list.put("cocodrilos");
-    	list.put("frutas");
-    	list.put("dk");
-    	list.put("test");
-    	
-    	obj.put("movibles",list);
-    	
-    	jsonString = obj.toString();
-    	
-    	System.out.println(obj);
+    
+		//Instancia JSONManager para obtener los JSON's
+    	JSONManager jsonManager = new JSONManager();
     	
     	
+    	//Representa el JSONProveniente del Cliente
+    	JSONObject jsonFromClient = new JSONObject();
+    	jsonFromClient.put("POSX","350");
+    	jsonFromClient.put("POSY","650");
     	
+    	String jsonFromClientString = jsonFromClient.toString();
     	
-    	//To JSON again
+    	System.out.println(jsonFromClientString);
     	
-    	String jsonFromClient = jsonString;
-		
-		JSONObject jObjtoSend = new JSONObject(jsonFromClient);
-		
-		System.out.println("\n\nPosx to send: " + jObjtoSend.get("posx"));
+    	//Se corre el servidor
+    	runServer(jsonFromClientString);
+    	
     	
     }
 
