@@ -2,6 +2,63 @@ import org.json.*;
 
 public class JSONManager {
 	
+	
+	
+	/**
+	 * Maneja el JSON proveniente del Cliente cuando este quiere
+	 * iniciar un nuevo juego.
+	 * @param jObj
+	 * @throws JSONException 
+	 */
+	public void managePlay(JSONObject jObj) throws JSONException {
+		
+		System.out.println("\nPlay: " + jObj.get("PLAY"));
+		
+	}
+	
+	/**
+	 * Maneja el JSON proveniente del Cliente cuando este quiere
+	 * observar un juego existente.
+	 * @param jObj
+	 * @throws JSONException 
+	 */
+	public void manageObserve(JSONObject jObj) throws JSONException {
+		
+		System.out.println("\nObserve: " + jObj.get("OBSERVE"));
+	}
+	
+	/**
+	 * Maneja el JSON proveniente del Cliente cada vez que
+	 * este lo solicie para poder graficar.
+	 * @param jObj
+	 * @throws JSONException 
+	 */
+	public void manageInput(JSONObject jObj) throws JSONException {
+		
+		System.out.println("\nCode: " + jObj.get("CODE"));
+		System.out.println("\nPosx: " + jObj.get("POSX"));
+		System.out.println("\nPosy: " + jObj.get("POSY"));
+		
+		//Array input serian las teclas de up, right, down, left (horario)
+		//int[] input = {0,1,0,1}
+		//juego1.recieveJSONInput(int[] input);
+		
+	}
+	
+	/**
+	 * Maneja el JSON proveniente del Cliente cuando no llega con los Keys preestablecidos.
+	 * @param jObj
+	 * @throws JSONException
+	 */
+	public void manageException(JSONObject jObj) throws JSONException {
+		
+		//Vuelve el JSON un String (Asi llegara al servidor)
+    	String jsonException = jObj.toString();
+    	
+    	System.out.println("jsonException:\n" + jsonException);
+		
+	}
+	
 	/**
 	 * Genera el topJSON
 	 * @return topJSON
@@ -103,6 +160,8 @@ public class JSONManager {
 		
 		//FruitsArray
     	JSONArray fruitsArray = new JSONArray();
+    	
+    	//juego1.getListaF
 		
 		return fruitsArray;
 		
