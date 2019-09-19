@@ -28,6 +28,17 @@ public class Main {
     	
     	System.out.println(obj);
     	
+    	
+    	
+    	
+    	//To JSON again
+    	
+    	String jsonFromClient = jsonString;
+		
+		JSONObject jObjtoSend = new JSONObject(jsonFromClient);
+		
+		System.out.println("\n\nPosx to send: " + jObjtoSend.get("posx"));
+    	
     }
 
 }
