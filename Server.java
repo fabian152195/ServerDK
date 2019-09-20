@@ -12,6 +12,8 @@ import java.net.*;
 //Server class 
 public class Server 
 { 
+	
+	
 	public static void main(String[] args) throws IOException 
 	{ 
 		// server is listening on port 5056 
@@ -61,6 +63,7 @@ class ClientHandler extends Thread
 	final DataOutputStream dos; 
 	final Socket s; 
 	
+	
 
 	// Constructor 
 	public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos) 
@@ -70,6 +73,17 @@ class ClientHandler extends Thread
 		this.dos = dos; 
 	} 
 
+	public String readMessage() throws IOException {
+		DatoSocket dato = new DatoSocket();
+		String respuesta = dato.readObject(dis);
+		return respuesta;
+	}
+	
+	public void sendMessage(String message) throws IOException {
+		DatoSocket dato = new DatoSocket(message);
+		dato.writeObject(dos);
+	}
+	
 	@Override
 	public void run() 
 	{ 
@@ -80,9 +94,9 @@ class ClientHandler extends Thread
 		while (true) 
 		{ 
 			try { 
-				System.out.print(">> ");
+				System.out.print("[Server] >> ");
 				String message = input.next();
-				DatoSocket dato = new DatoSocket(message);// El dato a enviar
+				// El dato a enviar
 				
 				if (message.equals("bye"))
 				{
@@ -90,11 +104,16 @@ class ClientHandler extends Thread
 				}
 				else {
 					
-					dato.writeObject (dos);
+					sendMessage(message);
+					//waits for an answer:
+					String resp = readMessage();
+					System.out.println("\n[Cliente] >> " + resp);
+					
+					}
 				}
 				 // Se envia el dato
 				
-			} catch (IOException e) { 
+			 catch (IOException e) { 
 				e.printStackTrace(); 
 			} 
 		} 

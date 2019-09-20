@@ -6,6 +6,11 @@ public class DatoSocket {
 	public int c;
     public String d; 
     
+    public DatoSocket() {
+    	c = 0;
+    	d = "";
+    }
+    
     public DatoSocket(String dato) {
     	c = dato.length();
     	d = dato;
@@ -24,7 +29,7 @@ public class DatoSocket {
             out.writeByte ('\0');
         }
     
-    public void readObject(java.io.DataInputStream in)
+    public String readObject(java.io.DataInputStream in)
     	     throws IOException
     	     {
     	         // Se lee la longitud de la cadena y se le resta 1 para eliminar el \0 que nos envía C.
@@ -38,6 +43,7 @@ public class DatoSocket {
 
     	        // Se lee el caracter nulo del final
     	         in.read(aux,0,1);
+    	         return d;
     	     }
    
 }
