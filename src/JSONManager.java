@@ -1,8 +1,21 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.*;
 
 public class JSONManager {
 	
+	Game game;
 	
+	
+	///Constructor
+	
+	JSONManager(Game game){
+		this.game = game;
+	}
+	
+	
+	///Funciones
 	
 	/**
 	 * Maneja el JSON proveniente del Cliente cuando este quiere
@@ -10,9 +23,13 @@ public class JSONManager {
 	 * @param jObj
 	 * @throws JSONException 
 	 */
-	public void managePlay(JSONObject jObj) throws JSONException {
+	public String managePlay(JSONObject jObj) throws JSONException {
 		
 		System.out.println("\nPlay: " + jObj.get("PLAY"));
+		
+		String response = (String)jObj.get("PLAY");
+		
+		return response;
 		
 	}
 	
@@ -22,9 +39,13 @@ public class JSONManager {
 	 * @param jObj
 	 * @throws JSONException 
 	 */
-	public void manageObserve(JSONObject jObj) throws JSONException {
+	public String manageObserve(JSONObject jObj) throws JSONException {
 		
 		System.out.println("\nObserve: " + jObj.get("OBSERVE"));
+		
+		String response = (String)jObj.get("OBSERVE");
+		
+		return response;
 	}
 	
 	/**
@@ -33,11 +54,25 @@ public class JSONManager {
 	 * @param jObj
 	 * @throws JSONException 
 	 */
-	public void manageInput(JSONObject jObj) throws JSONException {
+	public String manageInput(JSONObject jObj) throws JSONException {
 		
-		System.out.println("\nCode: " + jObj.get("CODE"));
-		System.out.println("\nPosx: " + jObj.get("POSX"));
-		System.out.println("\nPosy: " + jObj.get("POSY"));
+		String response = "|";
+		
+		System.out.println("\nCode: " + jObj.get("CODE") + "\n");
+		System.out.println("\nInput: " + jObj.get("INPUT"));
+		
+		JSONArray jsonArray = (JSONArray) jObj.get("INPUT");
+		
+		//List<String> list = new ArrayList<String>();
+		for (int i=0; i<jsonArray.length(); i++) {
+		    response += " " + jsonArray.getString(i) + " ";
+		}
+		
+		response += "|";
+		
+		
+		
+		return response;
 		
 		//Array input serian las teclas de up, right, down, left (horario)
 		//int[] input = {0,1,0,1}

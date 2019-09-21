@@ -15,10 +15,13 @@ import Server.*;
 
 public class Main {
 	
-	
+	//Unicas dos instancias posibles de un Game
+	static Game gameA = new Game();
+	static Game gameB = new Game();
 	
 	//Instancia JSONManager para obtener los JSON's
-	static JSONManager jsonManager = new JSONManager();
+	static JSONManager jsonManagerA = new JSONManager(gameA);
+	static JSONManager jsonManagerB = new JSONManager(gameB);
 	
 	
 	public static void manageInput(String code, int x, int y) {
@@ -45,21 +48,21 @@ public class Main {
 		
 		//Para iniciar a jugar
 		if (jObjFromClient.has("PLAY") == true) {
-			jsonManager.managePlay(jObjFromClient);
+			jsonManagerA.managePlay(jObjFromClient);
 		}
 		
 		//Para observar un juego
 		else if (jObjFromClient.has("OBSERVE") == true) {
-			jsonManager.manageObserve(jObjFromClient);
+			jsonManagerA.manageObserve(jObjFromClient);
 		}
 		
 		//Para actualizar el cliente
 		else if (jObjFromClient.has("CODE") == true && jObjFromClient.has("POSX") == true && jObjFromClient.has("POSY") == true) {
-			jsonManager.manageInput(jObjFromClient);
+			jsonManagerA.manageInput(jObjFromClient);
 		}
 		
 		else {
-			jsonManager.manageException(jObjFromClient);
+			jsonManagerA.manageException(jObjFromClient);
 		}
 		
 		
@@ -99,13 +102,21 @@ public class Main {
 						DataInputStream dis = new DataInputStream(s.getInputStream()); 
 						DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
 						
-						System.out.println("Assigning new thread for this client"); 
+						System.out.println("Assigning new thread for this client");
+						
+						
+						DatoSocket dato = new DatoSocket();
+						String res = dato.readObject(dis);
+						String jsonOut = manageJSONFromClient(res);
+						
 
 						// create a new thread object 
-						Thread t = new ClientHandler(s, dis, dos); 
+						Thread t = new ClientHandler(s, dis, dos, jsonOut);
+						
+						
 
 						// Invoking the start() method 
-						t.start(); 
+						t.start();
 						
 					} 
 					catch (Exception e){ 
@@ -116,53 +127,58 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Maneja el JSON proveniente del CLiente
+	 * Envia el json correspondiente devuelta al servidor
+	 * para que este sea enviado al Cliente.
+	 * @param buffer
+	 * @return
+	 * @throws JSONException
+	 */
+	public static String manageJSONFromClient(String buffer) throws JSONException {
+		
+		
+		System.out.println("\n\nJSON from Client: " + buffer);
+		
+		String response = "notjson";
+		
+  	
+		JSONObject jObjFromClient = new JSONObject(buffer);
+		
+		//Para iniciar a jugar
+		if (jObjFromClient.has("PLAY") == true) {
+			response = jsonManagerA.managePlay(jObjFromClient);
+		}
+		
+		//Para observar un juego
+		else if (jObjFromClient.has("OBSERVE") == true) {
+			response = jsonManagerA.manageObserve(jObjFromClient);
+		}
+		
+		//Para actualizar el cliente
+		else if (jObjFromClient.has("CODE") == true && 
+							jObjFromClient.has("INPUT") == true ) {
+			response = jsonManagerA.manageInput(jObjFromClient);
+		}
+				
+		else {
+			jsonManagerA.manageException(jObjFromClient);
+		}
+				
+		
+		
+		return response;
+		
+		
+	}
+	
 	
 	
 	
 	public static void main (String [] args) throws JSONException, IOException
-    {
-    	/*TEST */
-    	//Representa el JSONProveniente del Cliente para Iniciar un Juego
-    	JSONObject jsonFromClientPlay = new JSONObject();
-    	//Ingresa las posiciones que vendran desde el Cliente
-    	jsonFromClientPlay.put("PLAY","Request");
-    	//Vuelve el JSON un String (Asi llegara al servidor)
-    	String jsonFromClientStringPlay = jsonFromClientPlay.toString();
+    { 	
     	
-    	//Representa el JSONProveniente del Cliente para Observar un juego
-    	JSONObject jsonFromClientObserve = new JSONObject();
-    	//Ingresa las posiciones que vendran desde el Cliente
-    	jsonFromClientObserve.put("OBSERVE","A1B2C3");
-    	//Vuelve el JSON un String (Asi llegara al servidor)
-    	String jsonFromClientStringObserve = jsonFromClientObserve.toString();
-    	
-    	//Representa el JSONProveniente del Cliente para Actualizar el cliente
-    	JSONObject jsonFromClientUpdate = new JSONObject();
-    	//Ingresa las posiciones que vendran desde el Cliente
-    	jsonFromClientUpdate.put("CODE","A1B2C3");
-    	jsonFromClientUpdate.put("POSX","350");
-    	jsonFromClientUpdate.put("POSY","650");
-    	//Vuelve el JSON un String (Asi llegara al servidor)
-    	String jsonFromClientStringUpdate = jsonFromClientUpdate.toString();
-    	
-    	System.out.println("JSON from Client -> Play:\n" + jsonFromClientStringPlay);
-    	//Se corre el servidor
-    	runServer(jsonFromClientStringPlay);
-    	
-    	System.out.println("JSON from Client -> Observe:\n" + jsonFromClientStringObserve);
-    	//Se corre el servidor
-    	runServer(jsonFromClientStringObserve);
-    	
-    	System.out.println("JSON from Client -> Update:\n" + jsonFromClientStringUpdate);
-    	//Se corre el servidor
-    	runServer(jsonFromClientStringUpdate);
-
-    	
-    	
-    	
-    	
-    	
-    	
+    	   	
     	runServer();
     	
     }

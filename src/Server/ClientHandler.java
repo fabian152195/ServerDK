@@ -18,6 +18,8 @@ public class ClientHandler extends Thread
 	final DataOutputStream dos; 
 	final Socket s; 
 	
+	String jsonOut;
+	
 	
 
 	// Constructor 
@@ -26,6 +28,15 @@ public class ClientHandler extends Thread
 		this.s = s; 
 		this.dis = dis; 
 		this.dos = dos; 
+	}
+	
+	public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, 
+			String oJ) 
+	{ 
+		this.s = s; 
+		this.dis = dis; 
+		this.dos = dos;
+		this.jsonOut = oJ;
 	} 
 
 	public String readMessage() throws IOException {
@@ -49,6 +60,23 @@ public class ClientHandler extends Thread
 		while (true) 
 		{ 
 			try { 
+				String resp = readMessage();
+				System.out.println("\n[Cliente] >> " + resp);
+				
+				
+				
+				//Celebrate
+				System.out.print("[Server] >> " + jsonOut);
+				//String message = input.next();
+				
+				sendMessage(jsonOut);
+								
+				
+				
+				
+				break;
+				
+				/*
 				System.out.print("[Server] >> ");
 				String message = input.next();
 				// El dato a enviar
@@ -64,7 +92,7 @@ public class ClientHandler extends Thread
 					String resp = readMessage();
 					System.out.println("\n[Cliente] >> " + resp);
 					
-					}
+					}*/
 				}
 				 // Se envia el dato
 				

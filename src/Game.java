@@ -1,6 +1,10 @@
 
 public class Game {
 	
+	///Define si alguien esta jugando con esta instancia de Game
+	boolean isPlaying;
+
+	//Array Game
 	String state;
 	int score;
 	int level;
@@ -12,6 +16,8 @@ public class Game {
 	
 	//Constructor
 	Game() {
+		
+		isPlaying = false;
 		
 	}
 
@@ -72,6 +78,15 @@ public class Game {
 
 	public void setFruitsList(Fruit[] fruitsList) {
 		this.fruitsList = fruitsList;
+	}
+	
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+
+
+	public void setPlaying(boolean isPlaying) {
+		this.isPlaying = isPlaying;
 	}
 	
 	
