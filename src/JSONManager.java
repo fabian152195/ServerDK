@@ -1,21 +1,67 @@
-import java.util.ArrayList;
-import java.util.List;
 
 import org.json.*;
 
 public class JSONManager {
 	
-	Game game;
+	Game gameA;
+	Game gameB;
 	
 	
 	///Constructor
 	
-	JSONManager(Game game){
-		this.game = game;
+	JSONManager(Game gameA, Game gameB){
+		this.gameA = gameA;
+		this.gameB = gameB;
 	}
 	
 	
 	///Funciones
+	
+	/**
+	 * Genera un codigo para el juego.
+	 * @param game
+	 */
+	public void generateCode(Game game) {
+		//Generar codigo aleatorio
+		
+		String code = "000" + game.getId();
+		
+		
+		if (game.getId() == gameA.getId()) {
+			this.gameA.setCode(code);
+		} else if (game.getId() == gameB.getId()) {
+			this.gameB.setCode(code);
+		} else {
+			System.out.println("Fail code generator");
+		}
+		
+		
+		
+	}
+	
+	/**
+	 * Devuelve el juego al cual el codigo le pertenece.
+	 * @param code
+	 * @return game
+	 */
+	public Game getGame(String code) {
+		
+		Game game;
+		
+		if (gameA.getCode() == code) {
+			game = gameA;
+			System.out.println("Got GameA");
+		} else if (gameB.getCode() == code) {
+			game = gameB;
+			System.out.println("Got GameB");
+		} else {
+			game = null;
+			System.out.println("Got null");
+		}
+		
+		return game;
+	}
+	
 	
 	/**
 	 * Maneja el JSON proveniente del Cliente cuando este quiere
@@ -25,11 +71,45 @@ public class JSONManager {
 	 */
 	public String managePlay(JSONObject jObj) throws JSONException {
 		
-		System.out.println("\nPlay: " + jObj.get("PLAY"));
+		String permition = "0";
 		
-		String response = (String)jObj.get("PLAY");
+		if (gameA.isPlaying && gameB.isPlaying) {
+			//Cuando los dos juegos estan ocupados
+			permition = "-1";
+		} else {
+			if (gameA.isPlaying == false) {
+				//Cuando el juego A esta desocupado
+				
+				//Se cambia el boolean del juego A
+				gameA.setPlaying(true);
+				//Se crea un codigo para este
+				generateCode(gameA);
+				//Se enviara este codigo
+				permition = gameA.getCode();
+			}
+			else {
+				//Cuando el juego B esta desocupado
+				
+				//Se cambia el boolean del juego B
+				gameB.setPlaying(true);
+				//Se crea un codigo para este
+				generateCode(gameB);
+				//Se enviara este codigo
+				permition = gameB.getCode();
+				
+			}
+		}
 		
-		return response;
+		//Se crea un objeto JSON
+		JSONObject toClient = new JSONObject();
+		//Se agrega el resultado con el key
+		toClient.put("PLAY", permition);
+		//Se convierte el nuevo JSON a String
+		String toClientString = toClient.toString();
+		
+		System.out.println("[+] Server >> " + toClientString + "\n\n");
+		
+		return toClientString;
 		
 	}
 	
@@ -41,11 +121,68 @@ public class JSONManager {
 	 */
 	public String manageObserve(JSONObject jObj) throws JSONException {
 		
-		System.out.println("\nObserve: " + jObj.get("OBSERVE"));
+		String permition;
 		
-		String response = (String)jObj.get("OBSERVE");
+		//Codigo del juego al cual se quiere observar
+		String code = jObj.getString("OBSERVE");
 		
-		return response;
+		String codeA = gameA.getCode();
+		String codeB = gameB.getCode();
+		
+		System.out.println("CLIENTCODE: ." + code + ".");
+		System.out.println("GAMEACODE: ." + codeA + ".");
+		System.out.println("GAMEBCODE: ." + codeB + ".");
+		
+		//JSONObject jsonObject = new JSONObject(gameA.getCode());
+		
+		
+		
+		System.out.println(codeA == codeA);
+
+			
+		if (codeA.equals(code)) {
+				
+			if (gameA.isObservable()) {
+				//Si se puede observar
+				permition = "1";
+				//Agrega un observador a la cantidad de observadores del juego A
+				gameA.setObservers(gameA.getObservers() + 1);
+			}
+			else {
+				//No se puede observar,
+				//deben haber ya 2 observadores
+				permition = "0";
+			}	
+				
+		} else if (codeB.equals(code)) {
+				
+			if (gameB.isObservable()) {
+				//Si se puede observar
+				permition = "1";
+				//Agrega un observador a la cantidad de observadores del juego B
+				gameB.setObservers(gameB.getObservers() + 1);
+			}
+			else {
+				//No se puede observar,
+				//deben haber ya 2 observadores
+				permition = "0";
+			}	
+			
+		} else {
+			permition = "-1";
+		}
+		
+		//Se crea un objeto JSON
+		JSONObject toClient = new JSONObject();
+		//Se agrega el resultado con el key
+		toClient.put("OBSERVE", permition);
+		//Se convierte el nuevo JSON a String
+		String toClientString = toClient.toString();
+				
+		System.out.println("[+] Server >> " + toClientString + "\n\n");
+		
+		return toClientString;
+
 	}
 	
 	/**

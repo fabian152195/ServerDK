@@ -3,6 +3,9 @@ public class Game {
 	
 	///Define si alguien esta jugando con esta instancia de Game
 	boolean isPlaying;
+	String code;
+	String id;
+	int observers;
 
 	//Array Game
 	String state;
@@ -15,15 +18,90 @@ public class Game {
 	Fruit[] fruitsList;
 	
 	//Constructor
-	Game() {
+	Game(String id) {
 		
-		isPlaying = false;
+		this.isPlaying = false;
+		this.code = "-1";
+		this.id = id;
+		this.observers = 0;
+		
+	}
+	
+	
+	///Metodos
+	
+	/**
+	 * Inicia el Juego
+	 */
+	public void startGame() {
+		System.out.println("Game " + id + " (" + code + ") -> Started!");
+	}
+	
+	public boolean isObservable() {
+		
+		boolean observable;
+		
+		if (observers < 2) {
+			//Solo pueden haber dos observadores por juego
+			observable = true;
+		} else {
+			//Cuando ya hay dos jugadores observando,
+			//no se pueden agregar mas.
+			observable = false;
+		}
+		
+		return observable;
 		
 	}
 
 	
 	///Getters & Setters
 	
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+
+	public void setPlaying(boolean isPlaying) {
+		this.isPlaying = isPlaying;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public int getObservers() {
+		return observers;
+	}
+
+	public void setObservers(int observers) {
+		this.observers = observers;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	public String getState() {
 		return state;
 	}
@@ -80,14 +158,7 @@ public class Game {
 		this.fruitsList = fruitsList;
 	}
 	
-	public boolean isPlaying() {
-		return isPlaying;
-	}
-
-
-	public void setPlaying(boolean isPlaying) {
-		this.isPlaying = isPlaying;
-	}
+	
 	
 	
 

@@ -59,21 +59,16 @@ public class ClientHandler extends Thread
 		
 		while (true) 
 		{ 
-			try { 
+			try {
+				
+				//Manejo de lo obtenido del Cliente
 				String resp = readMessage();
-				System.out.println("\n[Cliente] >> " + resp);
+				//System.out.println("\n[Cliente] >> " + resp);
 				
-				
-				
-				//Celebrate
-				System.out.print("[Server] >> " + jsonOut);
-				//String message = input.next();
-				
+				//Manejo de lo que se mandará al Cliente
 				sendMessage(jsonOut);
+				//System.out.print("[Server] >> " + jsonOut);
 								
-				
-				
-				
 				break;
 				
 				/*
