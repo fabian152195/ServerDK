@@ -14,8 +14,8 @@ public class DKJr extends Entities{
 	
 	
 	
-	public DKJr(){
-		this.rect.setRect(0, Game.Height - 4*Game.tSize, 0, 0);	//Posición cada vez que se reinicie
+	public DKJr(int height, int tSize){
+		this.rect.setRect(0, height - 4*tSize, 0, 0);	//Posición cada vez que se reinicie
 		this.setSprite("dkjrIdle", "right");
 	}
 	

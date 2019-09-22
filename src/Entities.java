@@ -2,7 +2,7 @@
 import java.awt.*;
 
 public abstract class Entities{
-	protected Rectangle rect;
+	protected static Rectangle rect = new Rectangle();
 	private static String sprite;
 	private static String spriteDirection;
 	
@@ -49,7 +49,7 @@ public abstract class Entities{
 		return spriteDirection;
 	}
 	
-	public Rectangle getRect() {
+	public static Rectangle getRect() {
 		return rect;
 	}
 }

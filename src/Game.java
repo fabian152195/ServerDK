@@ -37,7 +37,7 @@ public class Game {
 		this.level = 1;
 		this.lives = 3;
 		
-		dkjr = new DKJr();
+		//dkjr = new DKJr();
 		
 	}
 	
@@ -67,7 +67,7 @@ public class Game {
 		public static int tSize 			= 8*sizeMult; 	//Tamaño de un tile, relativo al tamaño de la ventana del juego
 		
 		private static int state = MENU;
-		private static DKJr dkjr = new DKJr();
+		private static DKJr dkjr = new DKJr(Height, tSize);
 		private static Rectangle platforms[] 	= new Rectangle[11];	//11 plataformas sobre las que se puede caminar
 		private static Rectangle vines[] 		= new Rectangle[10]; 	//10 lianas
 		private static Crocodile crocs[] 	= new Crocodile[10];					//Max = 10

@@ -6,6 +6,20 @@ public class Fruit {
 	int posX;
 	int posY;
 	
+	
+	
+	
+	private int puntaje;
+	
+	public int getPuntaje() {
+		return puntaje;
+	}
+	
+	
+	
+	
+	
+	
 	Fruit(String type, int points, int posX, int posY) {
 		this.type = type;
 		this.points = points;
