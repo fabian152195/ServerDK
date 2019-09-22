@@ -7,13 +7,6 @@ public class DKJr extends Entities{
 	int posX;
 	int posY;
 	
-	
-	
-	
-	
-	
-	
-	
 	public DKJr(int height, int tSize){
 		this.rect.setRect(0, height - 4*tSize, 0, 0);	//Posición cada vez que se reinicie
 		this.setSprite("dkjrIdle", "right");
@@ -21,20 +14,6 @@ public class DKJr extends Entities{
 	
 	boolean onVine = false;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public boolean isOnVine() {
 		return onVine;
 	}
@@ -72,7 +51,4 @@ public class DKJr extends Entities{
 	public void setPosY(int posY) {
 		this.posY = posY;
 	}
-	
-	
-
 }
