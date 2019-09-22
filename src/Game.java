@@ -73,6 +73,12 @@ public class Game {
 		private static Crocodile crocs[] 	= new Crocodile[10];					//Max = 10
 		private static Fruit fruits[] 	= new Fruit[10];				//Max = 10
 		
+		
+		
+		
+		
+		
+		
 		void initPlatforms(){
 			for (int i = 0; i < platforms.length; i++){
 				if (i == 0) {
