@@ -35,15 +35,13 @@ public class JSONManager {
 			System.out.println("Fail code generator");
 		}
 		
-		
-		
 	}
 	
 	/**
 	 * Devuelve el juego al cual el codigo le pertenece.
 	 * @param code
 	 * @return game
-	 */
+	 *//*
 	public Game getGame(String code) {
 		
 		Game game;
@@ -60,7 +58,7 @@ public class JSONManager {
 		}
 		
 		return game;
-	}
+	}*/
 	
 	
 	/**
@@ -134,10 +132,6 @@ public class JSONManager {
 		System.out.println("GAMEBCODE: ." + codeB + ".");
 		
 		//JSONObject jsonObject = new JSONObject(gameA.getCode());
-		
-		
-		
-		System.out.println(codeA == codeA);
 
 			
 		if (codeA.equals(code)) {
@@ -193,27 +187,74 @@ public class JSONManager {
 	 */
 	public String manageInput(JSONObject jObj) throws JSONException {
 		
-		String response = "|";
+		System.out.println("\nCode: " + jObj.get("CODE"));
+		System.out.println("\nInput: " + jObj.get("UPDATE"));
 		
-		System.out.println("\nCode: " + jObj.get("CODE") + "\n");
-		System.out.println("\nInput: " + jObj.get("INPUT"));
+		//Contendra la respuesta o el JSON saliente hacia el Cliente
+		String updateArray;
+		//Contendra el JSONArray proveniente del manager
+		JSONObject updateArrayJSON  = new JSONObject();
+		//Inicializacion de keyInputArray temporal
+		int[] keyInputTemp = {0,0,0,0};
+		//Contendra el keyPress Actual que se estara leyendo del JSON
+		String actualKey;
 		
-		JSONArray jsonArray = (JSONArray) jObj.get("INPUT");
+		//Obtiene el JSONArray proveniente del Cliente con el input
+		//de los 4 keyPress
+		JSONArray jsonArray = (JSONArray) jObj.get("UPDATE");
 		
-		//List<String> list = new ArrayList<String>();
+		//Recorre jsonArray obteniendo todas las posiciones de este
+		//Para guardalos en keyInputTemp
 		for (int i=0; i<jsonArray.length(); i++) {
-		    response += " " + jsonArray.getString(i) + " ";
+			//Guarda un keyPress como String
+			actualKey = jsonArray.getString(i);
+			//Convierte el keyPress en un int y lo guarda en el array temporal
+			keyInputTemp[i] = Integer.parseInt(actualKey);
 		}
 		
-		response += "|";
+		//Codigo del juego al cual se quiere observar
+		String code = jObj.getString("CODE");
+		
+		//Codigos de los juegos actuales
+		String codeA = gameA.getCode();
+		String codeB = gameB.getCode();
 		
 		
+		if (codeA.equals(code)) {
+			
+			gameA.setKeyInput(keyInputTemp);
+			gameA.update();
+			updateArrayJSON = generateUpdateJSON(code);
+				
+		} else if (codeB.equals(code)) {
+				
+			gameB.setKeyInput(keyInputTemp);
+			gameB.update();
+			updateArrayJSON = generateUpdateJSON(code);
+			
+		} else {
+			
+			//Se genera un array de Error
+			JSONArray errorArray = new JSONArray();
+			//Se ingresa un "-1" que sera interpretado por el cliente
+			errorArray.put("-1");
+			//Se ingresa el JSONarray al JSON saliente
+			updateArrayJSON.put("ERROR", errorArray);
+		}
 		
-		return response;
 		
-		//Array input serian las teclas de up, right, down, left (horario)
-		//int[] input = {0,1,0,1}
-		//juego1.recieveJSONInput(int[] input);
+		//Se crea un objeto JSON
+		JSONObject toClient = new JSONObject();
+		
+		//Se agrega updateArrayJSON con el key
+		toClient.put("UPDATE", updateArrayJSON);
+		//Se convierte el nuevo JSON a String
+		String toClientString = toClient.toString();
+		
+
+		System.out.println("[+] Server >> " + toClientString + "\n\n");
+				
+		return toClientString;
 		
 	}
 	
@@ -236,39 +277,39 @@ public class JSONManager {
 	 * @return topJSON
 	 * @throws JSONException
 	 */
-	public JSONObject generateJSON() throws JSONException {
+	public JSONObject generateUpdateJSON(String code) throws JSONException {
 		
-		//TopJSON
-    	JSONObject topJSON = new JSONObject();
+		//UpdateJSON
+    	JSONObject updateJSON = new JSONObject();		
 		
     	//GameArray
     	//Crea e ingresa el Array al TopJSON
-    	JSONArray gameArray = generateGameArray();
-    	topJSON.put("GAME",gameArray);
+    	JSONArray gameArray = generateGameArray(code);
+    	updateJSON.put("GAME",gameArray);
     	
     	//DKJrArray
     	//Crea e ingresa el Array al TopJSON
-    	JSONArray dKJrArray = generateDKJrArray();
-    	topJSON.put("DKJR",dKJrArray);
+    	JSONArray dKJrArray = generateDKJrArray(code);
+    	updateJSON.put("DKJR",dKJrArray);
     	
     	//CrocodilesArray
     	//Crea e ingresa el Array al TopJSON
-    	JSONArray crocodilesArray = generateCrocodilesArray();
-    	topJSON.put("CROCODILES",crocodilesArray);
+    	JSONArray crocodilesArray = generateCrocodilesArray(code);
+    	updateJSON.put("CROCODILES",crocodilesArray);
     	
     	//FruitsArray
     	//Crea e ingresa el Array al TopJSON
-    	JSONArray fruitsArray = generateFruitsArray();
-    	topJSON.put("FRUITS",fruitsArray);
+    	JSONArray fruitsArray = generateFruitsArray(code);
+    	updateJSON.put("FRUITS",fruitsArray);
     	
     	//FruitPointsArray
     	//Crea e ingresa el Array al TopJSON
-    	JSONArray fruitPointsArray = generateFruitPointsArray();
-    	topJSON.put("FRUITPOINTS",fruitPointsArray);
+    	JSONArray fruitPointsArray = generateFruitPointsArray(code);
+    	updateJSON.put("FRUITPOINTS",fruitPointsArray);
     	
     	
-    	//Retorna el topJSON ya listo para enviar
-    	return topJSON;
+    	//Retorna UpdateJSON ya listo para enviar
+    	return updateJSON;
 		
 	}
 	
@@ -276,10 +317,46 @@ public class JSONManager {
 	 * Genera el array de _ para agregarse al TopJSON 
 	 * @return gameArray
 	 */
-	public JSONArray generateGameArray() {
+	public JSONArray generateGameArray(String code) {
+		
+		//Datos necesarios para GameArray
+		String state;
+		String score;
+		String level;
+		String lives;
+		
+		//Codigos de los juegos actuales
+		String codeA = gameA.getCode();
+		String codeB = gameB.getCode();
+				
+		//Verifica con el codigo cual es el juego del cual debe
+		//obtener la informacion
+		if (codeA.equals(code)) {
+			
+			//Se obtienen las datos necesarios de gameA
+			state = gameA.getState();
+			score = Integer.toString(gameA.getScore());
+			level = Integer.toString(gameA.getLevel());
+			lives = Integer.toString(gameA.getLives());
+								
+		} else { //(codeB.equals(code)) {
+								
+			//Se obtienen las datos necesarios de gameB
+			state = gameB.getState();
+			score = Integer.toString(gameB.getScore());
+			level = Integer.toString(gameB.getLevel());
+			lives = Integer.toString(gameB.getLives());	
+			
+		}
 		
 		//GameArray
     	JSONArray gameArray = new JSONArray();
+		
+    	//Se agregan los datos necesarios a gameArray
+		gameArray.put(state);
+		gameArray.put(score);
+		gameArray.put(level);
+		gameArray.put(lives);
 		
 		return gameArray;
 		
@@ -291,23 +368,44 @@ public class JSONManager {
 	 * @return dKJrArray
 	 * @throws JSONException 
 	 */
-	public JSONArray generateDKJrArray() throws JSONException {
+	public JSONArray generateDKJrArray(String code) throws JSONException {
 		
-		//DKJrArray
-    	JSONArray dKJrArray = new JSONArray();
-    	
-    	//TopJSON
-    	JSONObject jObj = new JSONObject();
-    	
-    	
-    	//Test
-    	jObj.put("frutas","1");
-    	jObj.put("dk","2");
-    	
-    	dKJrArray.put(jObj);
-    	
-		
-		return dKJrArray;
+		//Datos necesarios para DKJrArray
+		String state;
+		String posX;
+		String posY;
+				
+		//Codigos de los juegos actuales
+		String codeA = gameA.getCode();
+		String codeB = gameB.getCode();
+						
+		//Verifica con el codigo cual es el juego del cual debe
+		//obtener la informacion
+		if (codeA.equals(code)) {
+					
+			//Se obtienen las datos necesarios de DKJr de gameA
+			state = gameA.getDkjr().getState();
+			posX = Integer.toString(gameA.getDkjr().getPosX());
+			posY = Integer.toString(gameA.getDkjr().getPosY());
+										
+		} else { //(codeB.equals(code)) {
+										
+			//Se obtienen las datos necesarios de DKJr de gameB
+			state = gameB.getDkjr().getState();
+			posX = Integer.toString(gameB.getDkjr().getPosX());
+			posY = Integer.toString(gameB.getDkjr().getPosY());
+					
+		}
+				
+		//GameArray
+		JSONArray gameArray = new JSONArray();
+				
+		//Se agregan los datos necesarios a gameArray
+		gameArray.put(state);
+		gameArray.put(posX);
+		gameArray.put(posY);
+				
+		return gameArray;
 		
 	}
 	
@@ -315,10 +413,55 @@ public class JSONManager {
 	 * Genera el array de _ para agregarse al TopJSON 
 	 * @return crocodilesArray
 	 */
-	public JSONArray generateCrocodilesArray() {
+	public JSONArray generateCrocodilesArray(String code) {
+		
+		//Lista de Cocodrilos Temporal
+		Crocodile[] tempCrocList;
 		
 		//CrocodilesArray
-    	JSONArray crocodilesArray = new JSONArray();
+		JSONArray crocodilesArray = new JSONArray();
+		
+		//Datos necesarios para CrocodilesArray
+		String color;
+		String posX;
+		String posY;
+		
+		//Codigos de los juegos actuales
+		String codeA = gameA.getCode();
+		String codeB = gameB.getCode();
+				
+		//Verifica con el codigo cual es el juego del cual debe
+		//obtener la informacion
+		if (codeA.equals(code)) {
+			
+			//Se obtiene la lista de Cocodrlos de gameA
+			tempCrocList = gameA.getCrocodilesList();
+												
+		} else { //(codeB.equals(code)) {
+												
+			//Se obtiene la lista de Cocodrlos de gameB
+			tempCrocList = gameB.getCrocodilesList();
+		}
+		
+		//Se itera por la lista de cocodrilos para guardar cada uno de ellos
+		for (int i = 0; i < tempCrocList.length;i++) {
+			
+			//tempArray
+			JSONArray tempArray = new JSONArray();
+			
+			//Se obtienen los atributos del cocodrilo necesarios
+			color = tempCrocList[i].getColor();
+			posX = Integer.toString(tempCrocList[i].getPosX());
+			posY = Integer.toString(tempCrocList[i].getPosY());
+			
+			//Se agregan los datos necesarios a tempArray
+			tempArray.put(color);
+			tempArray.put(posX);
+			tempArray.put(posY);
+			
+			//TempArray es ingresado al crocodilesArray
+			crocodilesArray.put(tempArray);
+		}
 		
 		return crocodilesArray;
 		
@@ -328,14 +471,57 @@ public class JSONManager {
 	 * Genera el array de _ para agregarse al TopJSON 
 	 * @return fruitsArray
 	 */
-	public JSONArray generateFruitsArray() {
+	public JSONArray generateFruitsArray(String code) {
 		
-		//FruitsArray
-    	JSONArray fruitsArray = new JSONArray();
-    	
-    	//juego1.getListaF
+		//Lista de Frutas Temporal
+		Fruit[] tempFruitList;
+				
+		//FruitArray
+		JSONArray fruitArray = new JSONArray();
+				
+		//Datos necesarios para CrocodilesArray
+		String type;
+		String posX;
+		String posY;
+			
+		//Codigos de los juegos actuales
+		String codeA = gameA.getCode();
+		String codeB = gameB.getCode();
 		
-		return fruitsArray;
+		//Verifica con el codigo cual es el juego del cual debe
+		//obtener la informacion
+		if (codeA.equals(code)) {
+					
+			//Se obtiene la lista de Cocodrlos de gameA
+			tempFruitList = gameA.getFruitsList();
+														
+		} else { //(codeB.equals(code)) {
+														
+			//Se obtiene la lista de Cocodrlos de gameB
+			tempFruitList = gameB.getFruitsList();
+		}
+		
+		//Se itera por la lista de frutas para guardar cada una de ellas
+		for (int i = 0; i < tempFruitList.length;i++) {
+					
+			//tempArray
+			JSONArray tempArray = new JSONArray();
+					
+			//Se obtienen los atributos del cocodrilo necesarios
+			type = tempFruitList[i].getType();
+			posX = Integer.toString(tempFruitList[i].getPosX());
+			posY = Integer.toString(tempFruitList[i].getPosY());
+					
+			//Se agregan los datos necesarios a tempArray
+			tempArray.put(type);
+			tempArray.put(posX);
+			tempArray.put(posY);
+					
+			//TempArray es ingresado al fruitArray
+			fruitArray.put(tempArray);
+		}
+				
+				return fruitArray;
 		
 	}
 	
@@ -343,7 +529,35 @@ public class JSONManager {
 	 * Genera el array de _ para agregarse al TopJSON 
 	 * @return fruitPointsArray
 	 */
-	public JSONArray generateFruitPointsArray() {
+	public JSONArray generateFruitPointsArray(String code) {
+		
+		//Codigos de los juegos actuales
+				String codeA = gameA.getCode();
+				String codeB = gameB.getCode();
+						
+				
+								
+				/*
+				if (codeA.equals(code)) {
+									
+										
+				} else { //(codeB.equals(code)) {
+										
+									
+				}
+				*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		//FruitPointsArray
     	JSONArray fruitPointsArray = new JSONArray();

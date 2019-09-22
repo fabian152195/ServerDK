@@ -6,6 +6,8 @@ public class Game {
 	String code;
 	String id;
 	int observers;
+	int[] keyInput;
+	
 
 	//Array Game
 	String state;
@@ -24,6 +26,14 @@ public class Game {
 		this.code = "-1";
 		this.id = id;
 		this.observers = 0;
+		//keyInput
+		
+		this.state = "Initial";
+		this.score = 0;
+		this.level = 1;
+		this.lives = 3;
+		
+		dkjr = new DKJr();
 		
 	}
 	
@@ -37,6 +47,11 @@ public class Game {
 		System.out.println("Game " + id + " (" + code + ") -> Started!");
 	}
 	
+	/**
+	 * Verifica si se puede observar este juego debido a la cantidad
+	 * de observadores ya en el.
+	 * @return boolean
+	 */
 	public boolean isObservable() {
 		
 		boolean observable;
@@ -51,6 +66,10 @@ public class Game {
 		}
 		
 		return observable;
+		
+	}
+	
+	public void update() {
 		
 	}
 
@@ -91,6 +110,16 @@ public class Game {
 		this.observers = observers;
 	}
 
+	public int[] getKeyInput() {
+		return keyInput;
+	}
+
+
+	public void setKeyInput(int[] keyInput) {
+		this.keyInput = keyInput;
+	}
+
+	
 	
 	
 	
