@@ -128,12 +128,12 @@ public class Main {
 	public static void main (String [] args) throws JSONException, IOException
     { 	
 		/////TEST PURPOSE ONLY/////
-		jsonManager.gameA.setState("StateTestA");
+		jsonManager.gameA.setState(1);
 		jsonManager.gameA.setScore(6900);
 		jsonManager.gameA.setLevel(17);
 		jsonManager.gameA.setLives(5);
 		
-		jsonManager.gameB.setState("StateTestB");
+		jsonManager.gameB.setState(1);
 		jsonManager.gameB.setScore(4200);
 		jsonManager.gameB.setLevel(9);
 		jsonManager.gameB.setLives(3);
@@ -149,19 +149,22 @@ public class Main {
 		Fruit f4 = new Fruit("peach",10000,302,223);
 		
 		Crocodile[] cArray = {c1,c2,c3,c4};
-		Fruit[] fArray = {f1,f2,f3,f4};
+		Fruit[] fArray = {f1,f2};
+		Fruit[] fpArray = {f3,f4};
 		
 		gameA.setCrocodilesList(cArray);
 		gameA.setFruitsList(fArray);
+		gameA.setFruitPointsList(fpArray);
 		
 		gameB.setCrocodilesList(cArray);
 		gameB.setFruitsList(fArray);
+		gameB.setFruitPointsList(fpArray);
 		/////TEST PURPOSE ONLY/////
 		
 		
 		
 		
-		
+		 
     	//Corre el servidor
     	runServer();
     	

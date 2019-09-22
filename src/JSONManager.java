@@ -334,7 +334,7 @@ public class JSONManager {
 		if (codeA.equals(code)) {
 			
 			//Se obtienen las datos necesarios de gameA
-			state = gameA.getState();
+			state = Integer.toString(gameA.getState());
 			score = Integer.toString(gameA.getScore());
 			level = Integer.toString(gameA.getLevel());
 			lives = Integer.toString(gameA.getLives());
@@ -342,7 +342,7 @@ public class JSONManager {
 		} else { //(codeB.equals(code)) {
 								
 			//Se obtienen las datos necesarios de gameB
-			state = gameB.getState();
+			state = Integer.toString(gameB.getState());
 			score = Integer.toString(gameB.getScore());
 			level = Integer.toString(gameB.getLevel());
 			lives = Integer.toString(gameB.getLives());	
@@ -479,7 +479,7 @@ public class JSONManager {
 		//FruitArray
 		JSONArray fruitArray = new JSONArray();
 				
-		//Datos necesarios para CrocodilesArray
+		//Datos necesarios para FruitArray
 		String type;
 		String posX;
 		String posY;
@@ -531,37 +531,54 @@ public class JSONManager {
 	 */
 	public JSONArray generateFruitPointsArray(String code) {
 		
-		//Codigos de los juegos actuales
-				String codeA = gameA.getCode();
-				String codeB = gameB.getCode();
+		//Lista de Puntos de Frutas Temporal
+		Fruit[] tempFruitPointsList;
 						
-				
-								
-				/*
-				if (codeA.equals(code)) {
-									
-										
-				} else { //(codeB.equals(code)) {
-										
-									
-				}
-				*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		//FruitPointsArray
-    	JSONArray fruitPointsArray = new JSONArray();
-		
+		JSONArray fruitPointsArray = new JSONArray();
+						
+		//Datos necesarios para FruitPointsArray
+		String points;
+		String posX;
+		String posY;
+				
+		//Codigos de los juegos actuales
+		String codeA = gameA.getCode();
+		String codeB = gameB.getCode();
+				
+		//Verifica con el codigo cual es el juego del cual debe
+		//obtener la informacion
+		if (codeA.equals(code)) {
+							
+		//Se obtiene la lista de Puntos de Frutas de gameA
+		tempFruitPointsList = gameA.getFruitPointsList();
+																
+		} else { //(codeB.equals(code)) {
+																
+			//Se obtiene la lista de Puntos de Frutas de gameB
+			tempFruitPointsList = gameB.getFruitPointsList();
+		}
+				
+		//Se itera por la lista de frutas para guardar cada una de ellas
+		for (int i = 0; i < tempFruitPointsList.length;i++) {
+							
+			//tempArray
+			JSONArray tempArray = new JSONArray();
+							
+			//Se obtienen los atributos del cocodrilo necesarios
+			points = Integer.toString(tempFruitPointsList[i].getPoints());
+			posX = Integer.toString(tempFruitPointsList[i].getPosX());
+			posY = Integer.toString(tempFruitPointsList[i].getPosY());
+							
+			//Se agregan los datos necesarios a tempArray
+			tempArray.put(points);
+			tempArray.put(posX);
+			tempArray.put(posY);
+							
+			//TempArray es ingresado al fruitArray
+			fruitPointsArray.put(tempArray);
+		}
+						
 		return fruitPointsArray;
 		
 	}

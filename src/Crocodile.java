@@ -1,9 +1,43 @@
 
-public class Crocodile {
+import java.awt.*;
+
+public class Crocodile extends Entities{
 	
 	String color;
 	int posX;
 	int posY;
+	
+	/**
+	 * Azul
+	 */
+	public Crocodile() {
+		this.rect.setRect(10*8*Game.sizeMult, (5*8+1) * Game.sizeMult, 0, 0);
+		this.setSprite("blue1", "");
+		
+	}
+	
+	/**
+	 * Rojo
+	 * @param vine
+	 * @param vines
+	 */
+	public Crocodile(int vine, Rectangle vines[]){
+		int newCrocPosX = ((int) vines[vine].getX() - 3) * Game.sizeMult;
+		int newCrocPosY = (int) vines[vine].getY() * Game.sizeMult;
+		
+		this.rect.setRect(newCrocPosX, newCrocPosY, 0, 0);
+
+		this.setSprite("red1", "");
+	}
+	
+	void move(){
+		
+	}
+	
+	
+	
+	
+	
 	
 	Crocodile(String color, int posX, int posY) {
 		this.color = color;
