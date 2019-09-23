@@ -38,30 +38,6 @@ public class JSONManager {
 	}
 	
 	/**
-	 * Devuelve el juego al cual el codigo le pertenece.
-	 * @param code
-	 * @return game
-	 *//*
-	public Game getGame(String code) {
-		
-		Game game;
-		
-		if (gameA.getCode() == code) {
-			game = gameA;
-			System.out.println("Got GameA");
-		} else if (gameB.getCode() == code) {
-			game = gameB;
-			System.out.println("Got GameB");
-		} else {
-			game = null;
-			System.out.println("Got null");
-		}
-		
-		return game;
-	}*/
-	
-	
-	/**
 	 * Maneja el JSON proveniente del Cliente cuando este quiere
 	 * iniciar un nuevo juego.
 	 * @param jObj
@@ -105,7 +81,7 @@ public class JSONManager {
 		//Se convierte el nuevo JSON a String
 		String toClientString = toClient.toString();
 		
-		System.out.println("[+] Server >> " + toClientString + "\n\n");
+		//System.out.println("[+] Server >> " + toClientString + "\n\n");
 		
 		return toClientString;
 		
@@ -127,9 +103,9 @@ public class JSONManager {
 		String codeA = gameA.getCode();
 		String codeB = gameB.getCode();
 		
-		System.out.println("CLIENTCODE: ." + code + ".");
-		System.out.println("GAMEACODE: ." + codeA + ".");
-		System.out.println("GAMEBCODE: ." + codeB + ".");
+		//System.out.println("CLIENTCODE: ." + code + ".");
+		//System.out.println("GAMEACODE: ." + codeA + ".");
+		//System.out.println("GAMEBCODE: ." + codeB + ".");
 		
 		//JSONObject jsonObject = new JSONObject(gameA.getCode());
 
@@ -173,7 +149,7 @@ public class JSONManager {
 		//Se convierte el nuevo JSON a String
 		String toClientString = toClient.toString();
 				
-		System.out.println("[+] Server >> " + toClientString + "\n\n");
+		//System.out.println("[+] Server >> " + toClientString + "\n\n");
 		
 		return toClientString;
 
@@ -187,8 +163,8 @@ public class JSONManager {
 	 */
 	public String manageInput(JSONObject jObj) throws JSONException {
 		
-		System.out.println("\nCode: " + jObj.get("CODE"));
-		System.out.println("\nInput: " + jObj.get("UPDATE"));
+		//System.out.println("\nCode: " + jObj.get("CODE"));
+		//System.out.println("\nInput: " + jObj.get("UPDATE"));
 		
 		//Contendra la respuesta o el JSON saliente hacia el Cliente
 		String updateArray;
@@ -252,7 +228,7 @@ public class JSONManager {
 		String toClientString = toClient.toString();
 		
 
-		System.out.println("[+] Server >> " + toClientString + "\n\n");
+		//System.out.println("[+] Server >> " + toClientString + "\n\n");
 				
 		return toClientString;
 		
@@ -268,7 +244,7 @@ public class JSONManager {
 		//Vuelve el JSON un String (Asi llegara al servidor)
     	String jsonException = jObj.toString();
     	
-    	System.out.println("jsonException:\n" + jsonException);
+    	//System.out.println("jsonException:\n" + jsonException);
 		
 	}
 	
@@ -435,12 +411,12 @@ public class JSONManager {
 		if (codeA.equals(code)) {
 			
 			//Se obtiene la lista de Cocodrlos de gameA
-			tempCrocList = gameA.getCrocodilesList();
+			tempCrocList = gameA.getCrocs();
 												
 		} else { //(codeB.equals(code)) {
 												
 			//Se obtiene la lista de Cocodrlos de gameB
-			tempCrocList = gameB.getCrocodilesList();
+			tempCrocList = gameB.getCrocs();
 		}
 		
 		//Se itera por la lista de cocodrilos para guardar cada uno de ellos
@@ -493,12 +469,12 @@ public class JSONManager {
 		if (codeA.equals(code)) {
 					
 			//Se obtiene la lista de Cocodrlos de gameA
-			tempFruitList = gameA.getFruitsList();
+			tempFruitList = gameA.getFruits();
 														
 		} else { //(codeB.equals(code)) {
 														
 			//Se obtiene la lista de Cocodrlos de gameB
-			tempFruitList = gameB.getFruitsList();
+			tempFruitList = gameB.getFruits();
 		}
 		
 		//Se itera por la lista de frutas para guardar cada una de ellas
@@ -521,7 +497,7 @@ public class JSONManager {
 			fruitArray.put(tempArray);
 		}
 				
-				return fruitArray;
+		return fruitArray;
 		
 	}
 	
@@ -583,7 +559,4 @@ public class JSONManager {
 		
 	}
 	
-	
-	
-
 }

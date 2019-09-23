@@ -19,8 +19,8 @@ public class Game {
 	int lives;
 	
 	//DKJr dkjr;
-	Crocodile[] crocodilesList;
-	Fruit[] fruitsList;
+	//Crocodile[] crocodilesList;
+	//Fruit[] fruitsList;
 	Fruit[] fruitPointsList;
 	
 	//Constructor
@@ -459,11 +459,18 @@ public class Game {
 		return keyInput;
 	}
 
-
 	public void setKeyInput(int[] keyInput) {
 		this.keyInput = keyInput;
 	}
 
+	public void setCrocs(Crocodile[] crocodilesList) {
+		this.crocs = crocodilesList;
+	}
+	
+	public void setFruits(Fruit[] fruitsList) {
+		this.fruits = fruitsList;
+	}
+	
 	
 	
 	
@@ -515,7 +522,8 @@ public class Game {
 	public void setDkjr(DKJr dkjr) {
 		this.dkjr = dkjr;
 	}
-
+	
+/*
 	public Crocodile[] getCrocodilesList() {
 		return crocodilesList;
 	}
@@ -531,7 +539,7 @@ public class Game {
 	public void setFruitsList(Fruit[] fruitsList) {
 		this.fruitsList = fruitsList;
 	}
-
+*/
 
 	public Fruit[] getFruitPointsList() {
 		return fruitPointsList;
